@@ -1,0 +1,140 @@
+﻿@page "/"
+
+<PageTitle>Offboard User</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Offboard User John Doe In Progress</MudText>
+<MudDatePicker Label="Basic example" @bind-Date="_date"/>
+<br />
+<MudText Typo="Typo.h5" GutterBottom="true">Offboard tasks Checklist</MudText>
+<br />
+<MudPaper>
+    <MudStepper Vertical ShowResetButton NonLinear="true">
+        <ChildContent>
+            <MudStep Title="Part 1 - Offboard user tasks">.
+               <MudPaper>
+                <MudList T="string" @bind-SelectedValues="SelectedValues" SelectionMode="SelectionMode.MultiSelection" ReadOnly="false" CheckBoxColor="Color.Tertiary">
+                    <MudListSubheader>
+                        Select your favourite drinks:
+                    </MudListSubheader>
+                    <MudListItem Text="1.1. Automatic to do item: Disable AD user - Completed" />
+                    <MudListItem Text="1.2. Manual to do item - Disable Mobile Phone Sync " Value='"H²O"' />
+@*                     <MudListItem Text="Teas">
+                        <NestedList>
+                            <MudListItem Text="English Tea" Value='"Earl Grey"' />
+                            <MudListItem Text="Chinese Tea" Value='"Gunpowder Tea"' />
+                            <MudListItem Text="Bubble Tea" />
+                        </NestedList>
+                    </MudListItem>
+                    <MudListItem Text="Coffees">
+                        <NestedList>
+                            <MudListItem Text="Irish Coffee" />
+                            <MudListItem Text="Double Espresso" />
+                            <MudListItem Text="Cafe Latte" />
+                        </NestedList>
+                    </MudListItem> *@
+                </MudList>
+            </MudPaper>
+
+            </MudStep>
+            <MudStep Title="Part 2 - Offboard User tasks" SecondaryText="Optional" Skippable="true">An ad group contains one or more ads which target a shared set of keywords.
+                <MudPaper>
+                <MudList T="string" @bind-SelectedValues="SelectedValues" SelectionMode="SelectionMode.MultiSelection" ReadOnly="false" CheckBoxColor="Color.Tertiary">
+                    <MudListSubheader>
+                        Select your favourite drinks:
+                    </MudListSubheader>
+                    <MudListItem Text="2.1. to do 3" />
+                    <MudListItem Text="2.2. to do 4"/>
+                </MudList>
+            </MudPaper>
+            </MudStep>
+            <MudStep Title="Part 3 - Offboard User tasks">
+                                <MudPaper>
+                <MudList T="string" @bind-SelectedValues="SelectedValues" SelectionMode="SelectionMode.MultiSelection" ReadOnly="false" CheckBoxColor="Color.Tertiary">
+                    <MudListSubheader>
+                        Select your favourite drinks:
+                    </MudListSubheader>
+                    <MudListItem Text="3.1. to do 5" />
+                    <MudListItem Text="3.2. to do 6"/>
+                </MudList>
+            </MudPaper>
+            </MudStep>
+        </ChildContent>
+        <CompletedContent>
+            Thank you for wasting your money on clicks!
+        </CompletedContent>
+    </MudStepper>
+</MudPaper>
+<br />
+<MudPaper Style="width: 800px">
+    <MudStepper Vertical @bind-ActiveIndex="_index" ShowResetButton>
+        <ChildContent>
+            @foreach (var step in _steps)
+            {
+                <MudStep Title="@step">Select campaign settings content @step</MudStep>
+            }
+        </ChildContent>
+        <CompletedContent>
+            Well done!!!
+        </CompletedContent>
+    </MudStepper>
+</MudPaper>
+
+<MudDivider />
+
+<MudButton OnClick="Remove" Color="Color.Error">Remove</MudButton>
+<MudText>@_steps.Count</MudText>
+<MudButton OnClick="Add" Color="Color.Primary">Add</MudButton>
+
+<MudDivider />
+
+<p>Current step index: @_index</p>
+@code {
+    private DateTime? _date = DateTime.Today;
+    public IReadOnlyCollection<string> SelectedValues = ["1. Automatic to do item: Disable AD user - Completed"];
+    class ChecklistStepItem
+    {
+
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool Completed { get; set; }
+        public bool IsOptional { get; set; }
+        public bool IsAutomated { get;set; }
+    }
+    class ChecklistStep
+    {
+        public Guid Id { get; set; }    
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool Completed { get; set; }
+        public bool IsOptional { get; set; }
+        public List<ChecklistStepItem> ChecklistStepItems { get; set; } = new List<ChecklistStepItem>();
+    }
+
+    class Checklist
+    {
+        public List<ChecklistStep> ChecklistSteps { get; set; } = new List<ChecklistStep>();
+
+
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+
+        return base.OnInitializedAsync();
+    }
+
+    List<string> _steps = new() { "First", "Second" ,"Third"};
+    int _index;
+
+    private void Add()
+    {
+      //  Random rnd = new Random();
+        _steps.Add($"Step {_steps.Count+1}");
+    }
+
+    private void Remove()
+    {
+        _steps.Remove(_steps[^1]);
+    }
+}
